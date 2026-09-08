@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>臺北榮民總醫院 M365 Copilot Workshop｜學員操作手冊</title>
+  <style>
+    :root {
+      color-scheme:light;
+      --bg:#f3f7f8;--panel:#ffffff;--ink:#172b3a;--muted:#5d7180;--line:#d3e1e5;
+      --navy:#153b5b;--teal:#007c83;--soft:#e3f3f2;--green:#16715b;
+      --gold:#b88a24;--shadow:0 8px 24px rgba(21,59,91,.07)
+    }
+    @media (prefers-color-scheme:dark) {
+      :root {
+        color-scheme:dark;
+        --bg:#101a22;--panel:#17242e;--ink:#edf5f7;--muted:#b7c8cf;--line:#38505c;
+        --navy:#dcecf4;--teal:#68cbd0;--soft:#183d43;--green:#74d0b4;
+        --gold:#e5c36f;--shadow:0 8px 24px rgba(0,0,0,.28)
+      }
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft JhengHei","Noto Sans TC",Arial,sans-serif;line-height:1.65}
+    .layout{display:grid;grid-template-columns:310px minmax(0,1fr);min-height:100vh}
+    aside{position:sticky;inset-block-start:0;height:100vh;overflow:auto;background:#153b5b;color:white;padding:24px 18px;border-inline-end:1px solid rgba(255,255,255,.12)}
+    aside h1{font-size:20px;line-height:1.35;margin:0 0 8px}
+    .sub{font-size:13px;color:#d2e4ed;margin-block-end:20px}
+    nav .group{margin:18px 0 8px;color:#9ed8d7;font-size:13px;font-weight:700;letter-spacing:.08em}
+    nav a{display:block;color:#fff;text-decoration:none;padding:8px 10px;border-radius:10px;margin:3px 0;font-size:14px}
+    nav a:hover,nav a:focus{background:rgba(255,255,255,.12)}
+    nav .child{padding-inline-start:24px;color:#d9eef0;font-size:13px}
+    main{padding:0 28px 64px;max-width:1180px;width:100%}
+    header{background:linear-gradient(135deg,#153b5b,#007c83);color:white;margin:0 -28px 28px;padding:42px 32px}
+    header .eyebrow{font-size:14px;letter-spacing:.1em;opacity:.88}
+    header h2{font-size:34px;line-height:1.3;margin:8px 0}
+    header p{max-width:960px;margin:0;font-size:18px;opacity:.94}
+    section{scroll-margin-block-start:24px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;margin:18px 0;padding:24px;box-shadow:var(--shadow)}
+    h2.section-title{margin:0 0 14px;color:var(--navy);display:flex;align-items:center;gap:12px;font-size:26px}
+    h3{color:var(--navy);margin:24px 0 8px}
+    .badge{display:inline-flex;align-items:center;justify-content:center;min-width:48px;height:34px;border-radius:999px;background:var(--soft);color:var(--teal);font-weight:800;padding:0 11px;font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+    .mini{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+    .mini-meta{color:var(--muted);font-size:13px;margin-block-start:7px}
+    .guide{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-block-start:16px}
+    .guide div{border-inline-start:4px solid var(--teal);padding:8px 12px;background:var(--soft);border-radius:8px}
+    .flow{margin-block-start:12px}
+    .flow-step{display:grid;grid-template-columns:54px 1fr;gap:14px;border-block-start:1px solid var(--line);padding:18px 0}
+    .flow-step:first-child{border-block-start:0}
+    .num{width:42px;height:42px;border-radius:14px;background:var(--teal);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+    .hint{color:var(--muted);font-size:14px}
+    .prompt-card{border:1px solid var(--line);border-radius:16px;padding:18px;margin:18px 0;background:var(--panel)}
+    .prompt-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-block-end:10px}
+    .prompt-no{font-weight:800;color:white;background:var(--teal);border-radius:10px;padding:6px 10px}
+    .screen{font-size:13px;color:var(--ink);background:var(--soft);border-radius:999px;padding:5px 10px}
+    .copy-button{margin-inline-start:auto;border:1px solid var(--teal);border-radius:10px;background:var(--teal);color:white;padding:7px 12px;font-weight:800;cursor:pointer}
+    .copy-button:hover,.copy-button:focus{filter:brightness(1.08)}
+    .copy-button.copied{background:var(--green);border-color:var(--green)}
+    .scenario,.files{font-size:13px;color:var(--muted);margin:8px 0}
+    .scenario strong,.files strong{color:var(--ink)}
+    textarea{width:100%;min-height:170px;border:1px solid var(--line);border-radius:14px;padding:16px;background:#102331;color:#edf6f7;font-family:Consolas,"Courier New",monospace;font-size:14px;line-height:1.65;resize:vertical}
+    textarea.short{min-height:150px} textarea.mid{min-height:290px} textarea.long{min-height:480px} textarea.xlong{min-height:720px}
+    footer{text-align:center;color:var(--muted);font-size:13px;padding:22px}
+    @media(max-width:900px){
+      .layout{display:block} aside{position:relative;height:auto} main{padding:0 16px 48px} header{margin:0 -16px 20px}
+      .copy-button{margin-inline-start:0} .guide{grid-template-columns:1fr}
+    }
+    @media print{
+      :root{color-scheme:light}
+      .layout{display:block} aside,.copy-button{display:none} body{background:white;color:#111827}
+      .card,.prompt-card{box-shadow:none;break-inside:avoid} header{background:white;color:#111;border-block-end:2px solid #ccc}
+      textarea{background:#f3f4f6;color:#111827;border:1px solid #ddd}
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <h1>臺北榮民總醫院<br>M365 Copilot Workshop</h1>
+    <div class="sub">學員操作手冊｜Prompt 複製貼上版</div>
+    <nav><div class="group">操作教材</div><a href="#overview">課程總覽</a><a href="#section-lab1">Lab1 簡報建立與編輯</a><a class="child" href="#section-lab1-prompt-1">Lab1-1A</a><a class="child" href="#section-lab1-prompt-2">Lab1-1B</a><a class="child" href="#section-lab1-prompt-3">Lab1-2-1</a><a class="child" href="#section-lab1-prompt-4">Lab1-2-2</a><a href="#section-lab2">Lab2 資料清洗、彙整與分析</a><a class="child" href="#section-lab2-prompt-1">Lab2-1A-1</a><a class="child" href="#section-lab2-prompt-2">Lab2-1A-2</a><a class="child" href="#section-lab2-prompt-3">Lab2-1B</a><a class="child" href="#section-lab2-prompt-4">Lab2-2-1</a><a class="child" href="#section-lab2-prompt-5">Lab2-2-2</a><a class="child" href="#section-lab2-prompt-6">Lab2-3-1</a><a class="child" href="#section-lab2-prompt-7">Lab2-3-2</a><a class="child" href="#section-lab2-prompt-8">Lab2-3-3</a><a href="#section-lab3">Lab3 文件套版、檢核與版本比對</a><a class="child" href="#section-lab3-prompt-1">Lab3-1A</a><a class="child" href="#section-lab3-prompt-2">Lab3-1B</a><a class="child" href="#section-lab3-prompt-3">Lab3-2A</a><a class="child" href="#section-lab3-prompt-4">Lab3-2B</a><a class="child" href="#section-lab3-prompt-5">Lab3-3A</a><a class="child" href="#section-lab3-prompt-6">Lab3-3B</a><a href="#section-lab4">Lab4 文件比對 Agent 建立與測試</a><a class="child" href="#section-lab4-prompt-1">Lab4-1-1</a><a class="child" href="#section-lab4-prompt-2">Lab4-1-2</a><a class="child" href="#section-lab4-prompt-3">Lab4-2</a><a href="#section-item">資源分享 延伸資源</a><a class="child" href="#section-item-prompt-1">項目 22</a><a class="child" href="#section-item-prompt-2">名稱</a><a class="child" href="#section-item-prompt-3">描述</a><a class="child" href="#section-item-prompt-4">Agent Instructions</a></nav>
+  </aside>
+  <main>
+    <header>
+      <div class="eyebrow">TAIPEI VETERANS GENERAL HOSPITAL · M365 COPILOT WORKSHOP</div>
+      <h2>臺北榮民總醫院 M365 Copilot Workshop｜學員操作手冊</h2>
+      <p>依課程 Lab 順序整理操作情境、使用工具、準備檔案與 Prompt。請完成每一張卡片的準備事項，再使用右上角按鈕複製 Prompt。</p>
+    </header>
+    <section id="overview" class="card">
+      <h2 class="section-title"><span class="badge">總覽</span>課程操作內容</h2>
+      <div class="grid"><div class="mini"><strong>Lab1｜簡報建立與編輯</strong><br>4 則操作 Prompt<div class="mini-meta">多模態產出與更新簡報／編輯簡報</div></div><div class="mini"><strong>Lab2｜資料清洗、彙整與分析</strong><br>8 則操作 Prompt<div class="mini-meta">資料清洗彙整／建立Agent SOP／資料分析</div></div><div class="mini"><strong>Lab3｜文件套版、檢核與版本比對</strong><br>6 則操作 Prompt<div class="mini-meta">套用範本文件／檢核文件是否符合規範／跨文件比對</div></div><div class="mini"><strong>Lab4｜文件比對 Agent 建立與測試</strong><br>3 則操作 Prompt<div class="mini-meta">建立文件比對 Agent／測試文件比對 Agent</div></div><div class="mini"><strong>資源分享｜延伸資源</strong><br>4 則操作 Prompt<div class="mini-meta">Agent Builder參考範本格式／Agent 與 Copilot 應用規劃教練</div></div></div>
+      <h3>使用方式</h3>
+      <div class="guide">
+        <div><strong>1. 準備資料</strong><br>依卡片列示的檔案開啟或加入參考資料。</div>
+        <div><strong>2. 選擇工具</strong><br>確認使用 Copilot Chat、Word、Excel、PowerPoint 或 Agent。</div>
+        <div><strong>3. 執行並檢核</strong><br>貼上 Prompt 後，核對來源、數字與輸出格式。</div>
+      </div>
+    </section>
+    <section id="section-lab1" class="card"><h2 class="section-title"><span class="badge">Lab1</span>簡報建立與編輯</h2><h3>操作順序</h3><div class="flow"><div class="flow-step"><div class="num">1</div><div><strong>Lab1-1A</strong><br><span class="hint">多模態產出與更新簡報｜Copilot Chat</span></div></div><div class="flow-step"><div class="num">2</div><div><strong>Lab1-1B</strong><br><span class="hint">多模態產出與更新簡報｜Copilot Chat</span></div></div><div class="flow-step"><div class="num">3</div><div><strong>Lab1-2-1</strong><br><span class="hint">編輯簡報｜Copilot in PowerPoint</span></div></div><div class="flow-step"><div class="num">4</div><div><strong>Lab1-2-2</strong><br><span class="hint">編輯簡報｜Copilot in PowerPoint</span></div></div></div><div id="section-lab1-prompt-1" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab1-1A</span><span class="screen">Copilot Chat</span><button class="copy-button" type="button" data-copy-target="section-lab1-prompt-1-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>多模態產出與更新簡報</div><div class="files"><strong>準備檔案：</strong>Lab1_護理品質月報_報導稿.docx<br>Lab1_院內感染統計_摘要.xlsx</div><textarea id="section-lab1-prompt-1-text" class="short" readonly>請根據附上的兩份資料——「護理品質月報_報導稿.docx」與「院內感染統計_摘要.xlsx」——製作一份「115 年 8 月護理部月會簡報」。</textarea></div><div id="section-lab1-prompt-2" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab1-1B</span><span class="screen">Copilot Chat</span><button class="copy-button" type="button" data-copy-target="section-lab1-prompt-2-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>多模態產出與更新簡報</div><div class="files"><strong>準備檔案：</strong>Lab1_護理品質月報_報導稿.docx<br>Lab1_院內感染統計_摘要.xlsx</div><textarea id="section-lab1-prompt-2-text" class="mid" readonly>請根據附上的兩份資料——「護理品質月報_報導稿.docx」與「院內感染統計_摘要.xlsx」——製作一份「115 年 8 月護理部月會簡報」。請依下列章節產出，每章一頁：
+1. 封面（標題、單位、月份）
+2. 本月護理品質焦點（3～4 個重點，取自報導稿）
+3. 院內感染管制數據（以表格呈現各指標本月值、上月值、目標值，數字取自統計表）
+4. 趨勢與差異說明（哪些指標達標、哪些惡化，一句話結論）
+5. 改善行動與下月目標
+規則：只使用兩份文件提供的內容，文件未提供的數字請標「資料未提供」，不要自行推估；百分比一律取到小數點後一位；月份以民國年表示（如 115 年 8 月）。</textarea></div><div id="section-lab1-prompt-3" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab1-2-1</span><span class="screen">Copilot in PowerPoint</span><button class="copy-button" type="button" data-copy-target="section-lab1-prompt-3-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>編輯簡報</div><div class="files"><strong>準備檔案：</strong>開啟：Lab1_護理部週會簡報_範本<br>引用：Lab1_本週感染管制數據更新<br>Lab1_護理品質月報_報導稿</div><textarea id="section-lab1-prompt-3-text" class="short" readonly>1. 更新數據：依附上的「Lab1_本週感染管制數據更新.xlsx」，更新『本週護理品質數據』頁表格的「本週值」欄
+
+2. 新增章節：在『本週護理品質數據』之後，依「Lab1_護理品質月報_報導稿.docx」新增 1～2 頁「本月護理品質焦點」，每頁條列 3～5 個重點。
+
+規則：沿用範本的版面、配色與頁尾，不要更動既有樣式；數據只依更新檔填入，更新檔未提供者標「待更新」；報導稿未提及的內容不要自行補充。</textarea></div><div id="section-lab1-prompt-4" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab1-2-2</span><span class="screen">Copilot in PowerPoint</span><button class="copy-button" type="button" data-copy-target="section-lab1-prompt-4-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>編輯簡報</div><div class="files"><strong>準備檔案：</strong>承接前一步<br>引用：Lab1_本週感染管制數據更新</div><textarea id="section-lab1-prompt-4-text" class="short" readonly>參考「Lab1_院內感染統計_摘要.xlsx」為權威來源，檢核目前這份例會簡報中出現的相關數據與敘述是否正確。
+對於不一致、或與數據矛盾的敘述（例如文字宣稱的趨勢方向與數字相反），直接在該處插入 PowerPoint 註解，寫明簡報數值、來源數值與問題。</textarea></div></section><section id="section-lab2" class="card"><h2 class="section-title"><span class="badge">Lab2</span>資料清洗、彙整與分析</h2><h3>操作順序</h3><div class="flow"><div class="flow-step"><div class="num">1</div><div><strong>Lab2-1A-1</strong><br><span class="hint">資料清洗彙整｜Copilot in Excel</span></div></div><div class="flow-step"><div class="num">2</div><div><strong>Lab2-1A-2</strong><br><span class="hint">資料清洗彙整｜Copilot in Excel</span></div></div><div class="flow-step"><div class="num">3</div><div><strong>Lab2-1B</strong><br><span class="hint">資料清洗彙整｜Copilot Chat</span></div></div><div class="flow-step"><div class="num">4</div><div><strong>Lab2-2-1</strong><br><span class="hint">建立Agent SOP｜Copilot Chat</span></div></div><div class="flow-step"><div class="num">5</div><div><strong>Lab2-2-2</strong><br><span class="hint">建立Agent SOP｜Copilot in Excel</span></div></div><div class="flow-step"><div class="num">6</div><div><strong>Lab2-3-1</strong><br><span class="hint">資料分析｜Copilot in Excel</span></div></div><div class="flow-step"><div class="num">7</div><div><strong>Lab2-3-2</strong><br><span class="hint">資料分析｜Copilot in Excel</span></div></div><div class="flow-step"><div class="num">8</div><div><strong>Lab2-3-3</strong><br><span class="hint">資料分析｜Copilot in Excel</span></div></div></div><div id="section-lab2-prompt-1" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-1A-1</span><span class="screen">Copilot in Excel</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-1-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>資料清洗彙整</div><div class="files"><strong>準備檔案：</strong>開啟：Lab2-1_護理照護品質數據</div><textarea id="section-lab2-prompt-1-text" class="mid" readonly>請對這些資料做清洗，為後續跨檔彙整做準備：
+1. 移除非資料列：報表標題、系統自動產生的說明列空白列。
+2. 統一病歷號寫法，使跨檔可以用病歷號正確對應。
+3. 量測時間／給藥時間統一為 YYYY-MM-DD HH:MM
+4. 生命徵象數值欄清成純數值
+5. 血壓「138/85」拆成收縮壓、舒張壓兩欄；『項目』統一為體溫、脈搏、收縮壓、舒張壓、血氧。
+6. 空白或明顯異常（如「發燒」「-」、體溫 0）標記為「待確認」，不要自行填補；完全重複的資料列去重並註記。
+請在每張表右側新增「清洗註記」欄說明處理方式。只依現有資料處理，不新增不存在的紀錄。</textarea></div><div id="section-lab2-prompt-2" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-1A-2</span><span class="screen">Copilot in Excel</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-2-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>資料清洗彙整</div><div class="files"><strong>準備檔案：</strong>承接前一步<br>引用：Lab2-1_病人基本資料</div><textarea id="section-lab2-prompt-2-text" class="mid" readonly>請參考此資料作跨檔彙整，產出一張可直接匯入 Power BI 的分析寬表，工作表命名「病人日彙整」。要求：
+1. 以「病歷號＋病房＋日期」為一列（一位病人每天一列）。
+2. 生命徵象由長轉寬：平均體溫、平均脈搏、平均收縮壓、平均舒張壓、平均血氧，數值取小數點後一位。
+3. 由『給藥紀錄』join 計算當日「給藥次數」（僅計狀態為『已執行』者）。
+4. 跨檔 join『住院病人主檔』，以病歷號帶入「科別」「年齡」兩欄；主檔查無對應者，該欄標「查無主檔」。
+5. 任一生命徵象缺值者，該欄標「資料不足」，不要以 0 計入平均。
+6. 依病房、病歷號、日期排序，第一列為欄位標題（不要有合併儲存格），方便 BI 讀取。
+請只用此資料與附檔計算，不要引入其他來源。</textarea></div><div id="section-lab2-prompt-3" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-1B</span><span class="screen">Copilot Chat</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-3-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>資料清洗彙整</div><div class="files"><strong>準備檔案：</strong>Lab2-1_護理照護品質數據<br>Lab2-1_病人基本資料</div><textarea id="section-lab2-prompt-3-text" class="mid" readonly>請清洗 Lab2-1_護理照護品質數據 內的資料
+1. 移除非資料列：報表標題、系統自動產生的說明列空白列。
+2. 統一病歷號寫法，使跨檔可以用病歷號正確對應。
+3. 量測時間／給藥時間統一為 YYYY-MM-DD HH:MM
+4. 生命徵象數值欄清成純數值
+5. 血壓「138/85」拆成收縮壓、舒張壓兩欄；『項目』統一為體溫、脈搏、收縮壓、舒張壓、血氧。
+6. 空白或明顯異常（如「發燒」「-」、體溫 0）標記為「待確認」，不要自行填補；完全重複的資料列去重並註記。
+請在每張表右側新增「清洗註記」欄說明處理方式。只依現有資料處理，不新增不存在的紀錄。
+
+完成後加入資料 Lab2-1_病人基本資料
+產出一張可直接匯入 Power BI 的分析寬表，工作表命名「病人日彙整」。要求：
+1. 以「病歷號＋病房＋日期」為一列（一位病人每天一列）。
+2. 生命徵象由長轉寬：平均體溫、平均脈搏、平均收縮壓、平均舒張壓、平均血氧，數值取小數點後一位。
+3. 由『給藥紀錄』join 計算當日「給藥次數」（僅計狀態為『已執行』者）。
+4. 跨檔 join『住院病人主檔』，以病歷號帶入「科別」「年齡」兩欄；主檔查無對應者，該欄標「查無主檔」。
+5. 任一生命徵象缺值者，該欄標「資料不足」，不要以 0 計入平均。
+6. 依病房、病歷號、日期排序，第一列為欄位標題（不要有合併儲存格），方便 BI 讀取。
+請只附檔計算，不要引入其他來源。</textarea></div><div id="section-lab2-prompt-4" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-2-1</span><span class="screen">Copilot Chat</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-4-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>建立Agent SOP</div><div class="files"><strong>準備檔案：</strong>Lab2-2_護理照護品質數據<br>Lab2-2_病人日彙整_目標範例</div><textarea id="section-lab2-prompt-4-text" class="mid" readonly>我每個月都會收到一份和「護理照護品質數據.xlsx」相同格式的 HIS 原始匯出檔（生命徵象／給藥長表）。我希望每次都能整理成像附上的「病人日彙整_目標範例.xlsx」那樣的分析寬表（每位病人每日一列，含平均生命徵象、給藥次數、異常徵象標記、風險分級與日期維度，可直接匯入 Power BI）。
+請先分析這份『目標範例』的欄位與格式，再把「從原始匯出檔整理到此目標表」的完整處理流程，寫成一份可重複使用的 Markdown 作業 SOP，內容需包含：
+1. 目的與適用檔案。
+2. 每一步驟的處理規則（清洗、長轉寬、彙整計算、缺值處理、異常與風險判讀門檻）。
+3. 產出物與欄位定義（需對齊目標範例的每一欄）。
+4. 一段可直接貼到 Copilot in Excel 使用的『指令範本』。
+請用清楚的標題階層與清單撰寫，讓不同同仁拿到都能產出一致結果。
+請直接幫我產出 Markdown 檔案</textarea></div><div id="section-lab2-prompt-5" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-2-2</span><span class="screen">Copilot in Excel</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-5-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>建立Agent SOP</div><div class="files"><strong>準備檔案：</strong>開啟：Lab2-2護理照護品質數據<br>引用：Lab2-2-1產出的檔案</div><textarea id="section-lab2-prompt-5-text" class="short" readonly>請你依照我提供的這份 SOP 指令範本，處理此份資料
+過程中若某一步資料不符合 SOP 假設（欄位缺漏、格式無法辨識），請標示『需人工確認』並說明原因，不要自行略過。
+最後請檢核資料是否有按照範本指令完成，有疑慮之處提供給我</textarea></div><div id="section-lab2-prompt-6" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-3-1</span><span class="screen">Copilot in Excel</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-6-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>資料分析</div><div class="files"><strong>準備檔案：</strong>Lab2-3_跌倒事件通報.xlsx<br>事件明細頁籤</div><textarea id="section-lab2-prompt-6-text" class="short" readonly>請根據此表製作一張「跌倒肇因柏拉圖」：
+1. 先依「肇因分類」統計各類事件件數，由多到少排序。
+2. 新增「累積百分比」欄。
+3. 插入柏拉圖（長條為各肇因件數、折線為累積百分比）。
+4. 在圖下方用一句話指出：累積達 80% 之前涵蓋了哪幾項肇因——這些就是應優先改善的關鍵少數。
+件數為 0 的肇因不列入。</textarea></div><div id="section-lab2-prompt-7" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-3-2</span><span class="screen">Copilot in Excel</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-7-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>資料分析</div><div class="files"><strong>準備檔案：</strong>Lab2-3_跌倒事件通報.xlsx<br>月趨勢頁籤</div><textarea id="section-lab2-prompt-7-text" class="short" readonly>此表為每月跌倒件數。請做趨勢分析：
+1. 以月份為 X、件數為 Y 畫散布圖，加入線性趨勢線並顯示公式與 R²。
+2. 計算全期平均與標準差，將件數高於「平均＋1 個標準差」的月份以紅色底色標記為異常月。
+3. 在表格下方用兩句話說明：整體趨勢是上升或下降、哪幾個月為異常高峰。
+只依本表數值計算，不要外推未提供的月份。</textarea></div><div id="section-lab2-prompt-8" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab2-3-3</span><span class="screen">Copilot in Excel</span><button class="copy-button" type="button" data-copy-target="section-lab2-prompt-8-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>資料分析</div><div class="files"><strong>準備檔案：</strong>承接前一步</div><textarea id="section-lab2-prompt-8-text" class="short" readonly>請將這份資料彙整成一段「跌倒事件分析摘要」，放在新的工作表，內容包含：
+1. 前 80% 的關鍵肇因有哪些。
+2. 整體月趨勢與異常高峰月份。
+3. 針對關鍵肇因，各提出一項可行的護理改善方向。
+完成後需要檢查所有數字須與前面工作表一致，不得新增資料未支持的結論。</textarea></div></section><section id="section-lab3" class="card"><h2 class="section-title"><span class="badge">Lab3</span>文件套版、檢核與版本比對</h2><h3>操作順序</h3><div class="flow"><div class="flow-step"><div class="num">1</div><div><strong>Lab3-1A</strong><br><span class="hint">套用範本文件｜Copilot Chat</span></div></div><div class="flow-step"><div class="num">2</div><div><strong>Lab3-1B</strong><br><span class="hint">套用範本文件｜Copilot in Word</span></div></div><div class="flow-step"><div class="num">3</div><div><strong>Lab3-2A</strong><br><span class="hint">檢核文件是否符合規範｜Copilot Chat</span></div></div><div class="flow-step"><div class="num">4</div><div><strong>Lab3-2B</strong><br><span class="hint">檢核文件是否符合規範｜Copilot in Word</span></div></div><div class="flow-step"><div class="num">5</div><div><strong>Lab3-3A</strong><br><span class="hint">跨文件比對｜Copilot Chat</span></div></div><div class="flow-step"><div class="num">6</div><div><strong>Lab3-3B</strong><br><span class="hint">跨文件比對｜Copilot in Word</span></div></div></div><div id="section-lab3-prompt-1" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab3-1A</span><span class="screen">Copilot Chat</span><button class="copy-button" type="button" data-copy-target="section-lab3-prompt-1-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>套用範本文件</div><div class="files"><strong>準備檔案：</strong>Lab3-1_招標公告文件_範本<br>Lab3-1_財物採購請購主檔</div><textarea id="section-lab3-prompt-1-text" class="short" readonly>【】標出的都是待填占位符
+請讀取Excel資料填入範本文件，一案會有一文件
+1. 金額同時保留阿拉伯數字並在括號內加註國字大寫（如 1,250,000 元（新臺幣壹佰貳拾伍萬元整））。
+2. 日期一律用民國年格式。
+3. 主檔中查無對應的占位符，保留【】並在該處加一個 Word 註解「主檔未提供，請人工確認」，不要自行編造。
+4. 範本既有的制式條文與版面不要更動。</textarea></div><div id="section-lab3-prompt-2" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab3-1B</span><span class="screen">Copilot in Word</span><button class="copy-button" type="button" data-copy-target="section-lab3-prompt-2-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>套用範本文件</div><div class="files"><strong>準備檔案：</strong>開啟：Lab3-1_招標公告文件_範本<br>引用：Lab3-1_財物採購請購主檔</div><textarea id="section-lab3-prompt-2-text" class="short" readonly>【】標出的都是待填占位符
+請讀取附檔的A案資料填入該份文件
+1. 金額同時保留阿拉伯數字並在括號內加註國字大寫（如 1,250,000 元（新臺幣壹佰貳拾伍萬元整））。
+2. 日期一律用民國年格式。
+3. 主檔中查無對應的占位符，保留【】並在該處加一個 Word 註解「主檔未提供，請人工確認」，不要自行編造。
+4. 範本既有的制式條文與版面不要更動。</textarea></div><div id="section-lab3-prompt-3" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab3-2A</span><span class="screen">Copilot Chat</span><button class="copy-button" type="button" data-copy-target="section-lab3-prompt-3-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>檢核文件是否符合規範</div><div class="files"><strong>準備檔案：</strong>Lab3-2_待審_招標公告文件<br>Lab3-2_採購文件製作規範</div><textarea id="section-lab3-prompt-3-text" class="short" readonly>請以「採購文件製作規範.docx」為檢查基準，逐條檢視我「待審_招標公告文件.docx」是否符合規範。
+請於待審_招標公告文件.docx內直接標記以下：
+1. 依規範的每一項要求，判斷待審文件『符合／不符合／未提及』。
+2. 對於不符合或未提及的項目，直接在待審文件對應段落插入 Word 註解，寫明缺什麼、應依規範哪一條補正。
+只依規範文字判斷，規範未涵蓋的內容不要評論；無法從文件判定者標「需人工確認」並加入註解。</textarea></div><div id="section-lab3-prompt-4" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab3-2B</span><span class="screen">Copilot in Word</span><button class="copy-button" type="button" data-copy-target="section-lab3-prompt-4-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>檢核文件是否符合規範</div><div class="files"><strong>準備檔案：</strong>開啟：Lab3-2_待審_招標公告文件<br>引用：Lab3-2_採購文件製作規範</div><textarea id="section-lab3-prompt-4-text" class="short" readonly>請以「採購文件製作規範.docx」為檢查基準，逐條檢視我開啟的「待審_招標公告文件.docx」是否符合規範。做法：
+1. 依規範的每一項要求，判斷待審文件『符合／不符合／未提及』。
+2. 對於不符合或未提及的項目，直接在待審文件對應段落插入 Word 註解，寫明缺什麼、應依規範哪一條補正。
+只依規範文字判斷，規範未涵蓋的內容不要評論；無法從文件判定者標「需人工確認」並加入註解。</textarea></div><div id="section-lab3-prompt-5" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab3-3A</span><span class="screen">Copilot Chat</span><button class="copy-button" type="button" data-copy-target="section-lab3-prompt-5-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>跨文件比對</div><div class="files"><strong>準備檔案：</strong>Lab3-3_財物採購契約條款_修訂版<br>Lab3-3_財物採購契約條款_現行版</div><textarea id="section-lab3-prompt-5-text" class="short" readonly>請比對兩份文件並完成：
+1. 逐條比對兩版差異，產出一張「版本差異對照表」，欄位為：條次／現行版內容／修訂版內容／差異類型（新增／刪除／修改）／差異重點。對語意有實質變動、可能影響權利義務的條文，於「差異重點」加註「⚠ 建議法務確認」。
+2. 以現行版為基礎，將修訂版的變更以 Word 追蹤修訂（增／刪／改可見）方式套用回現行版文件，讓承辦可以逐項接受或拒絕。
+只依兩份文件內容比對，不要自行增加任一版都沒有的條文；無法確定是否等義的條文，標「需人工確認」並加入註解。</textarea></div><div id="section-lab3-prompt-6" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab3-3B</span><span class="screen">Copilot in Word</span><button class="copy-button" type="button" data-copy-target="section-lab3-prompt-6-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>跨文件比對</div><div class="files"><strong>準備檔案：</strong>開啟：Lab3-3_財物採購契約條款_現行版 <br>引用：Lab3-3_財物採購契約條款_修訂版</div><textarea id="section-lab3-prompt-6-text" class="short" readonly>請參考附檔資料，於此文件開啟追蹤修訂後，依據修訂版本內容調整此文件
+，並於調整處新增註解說明原文及風險，讓承辦可以逐項接受或拒絕。
+只依兩份文件內容比對，不要自行增加任一版都沒有的條文；無法確定是否等義的條文，標「需人工確認」並加入註解。</textarea></div></section><section id="section-lab4" class="card"><h2 class="section-title"><span class="badge">Lab4</span>文件比對 Agent 建立與測試</h2><h3>操作順序</h3><div class="flow"><div class="flow-step"><div class="num">1</div><div><strong>Lab4-1-1</strong><br><span class="hint">建立文件比對 Agent｜M365 Copilot Agent Builder</span></div></div><div class="flow-step"><div class="num">2</div><div><strong>Lab4-1-2</strong><br><span class="hint">建立文件比對 Agent｜M365 Copilot Agent Builder</span></div></div><div class="flow-step"><div class="num">3</div><div><strong>Lab4-2</strong><br><span class="hint">測試文件比對 Agent｜M365 Copilot Agent（由 Lab4-1 建立）</span></div></div></div><div id="section-lab4-prompt-1" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab4-1-1</span><span class="screen">M365 Copilot Agent Builder</span><button class="copy-button" type="button" data-copy-target="section-lab4-prompt-1-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>建立文件比對 Agent</div><div class="files"><strong>準備檔案：</strong>放在知識來源:<br>Lab4-1_院內用藥參考<br>Lab4-1_高警訊藥品清單</div><textarea id="section-lab4-prompt-1-text" class="long" readonly>我想要建立一個「藥品仿單比對助手」，目前的想法如下：
+
+1. 想解決或協助的問題：
+臨床上常需比較同一藥品不同版本的仿單／衛教單張（例如主管機關完整仿單 vs 醫院給病人的衛教單張），或兩種不同藥品的仿單。各文件版面格式、詳略程度都不一樣，人工逐項對照費時、容易看漏，也不易同時對照院內用藥規範。
+2. 使用者可能什麼時候會使用：
+換藥或替代藥品評估時、對病人衛教說明前、處方或用藥安全審核時。
+3. 使用者可能會提供的資料(input)：
+每次上傳兩份藥品仿單或衛教單張檔案，格式不一定相同（可能一份 PDF、一份 Word，版面與詳略也不同）。
+4. 我預期的產出(output)：
+兩份文件的並列比較表、關鍵差異摘要、結合院內規範的臨床／衛教提醒。
+5. Agent 執行時應該要參考的資料（知識來源）：
+- 固定知識庫：院內用藥參考.pdf（院內品項代碼、健保給付、首選藥、院內列管交互作用、腎功能劑量調整）、高警訊藥品清單.pdf。
+- 當次上傳：使用者本次提供的兩份仿單／衛教單張，作為比較的標的。
+
+6. 我主要希望 Agent 協助我：
+從兩份格式不同的文件抽取相同欄位、逐項並列比較、標出差異與只有單方載明的項目；並依院內知識庫補充高警訊、交互作用與院內規範提醒，且標明來源。
+
+7. 我希望 Agent 在回覆前確認：
+- 資料來源都有依據，不可自行推論不存在的資料，如為推測需要特別註明（藥品資訊只依上傳的兩份文件，院內規範只依知識庫，兩者分開標示來源）
+- 若使用者表達不清時，先反問問題釐清需求
+- 不確定性若文件中未明確提及，請標示或反問</textarea></div><div id="section-lab4-prompt-2" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab4-1-2</span><span class="screen">M365 Copilot Agent Builder</span><button class="copy-button" type="button" data-copy-target="section-lab4-prompt-2-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>建立文件比對 Agent</div><div class="files"><strong>準備檔案：</strong>無需額外檔案</div><textarea id="section-lab4-prompt-2-text" class="mid" readonly>我希望加入以下規則:
+1. 只依照使用者提供的資料內容抽取，不要自行補充文件以外的藥品知識。
+2. 若比較文件時有一份未載明的項目，該格填「該版未載明」，並在「差異註記」標「僅單方載明」或「詳略不同」（例如完整仿單有賦形劑、衛教單張沒有）。
+3. 「院內參考」欄只依知識庫填入（如是否為高警訊藥品、院內是否列管該交互作用、院內品項代碼與健保給付碼）；知識庫未提及者留空。
+
+4.附一段 100 字內「臨床／衛教注意摘要」，點出兩版最關鍵的 2～3 個差異，並標明哪些提醒來自院內知識庫。
+5.最後須提醒AI僅提供資料彙總的邊界提示</textarea></div><div id="section-lab4-prompt-3" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Lab4-2</span><span class="screen">M365 Copilot Agent（由 Lab4-1 建立）</span><button class="copy-button" type="button" data-copy-target="section-lab4-prompt-3-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>測試文件比對 Agent</div><div class="files"><strong>準備檔案：</strong>Lab4-2_仿單_Amoxicillin_衛教單張 <br>Lab4-2_仿單_Amoxicillin_TFDA</div><textarea id="section-lab4-prompt-3-text" class="short" readonly>請比較兩份文件</textarea></div></section><section id="section-item" class="card"><h2 class="section-title"><span class="badge">資源分享</span>延伸資源</h2><h3>操作順序</h3><div class="flow"><div class="flow-step"><div class="num">1</div><div><strong>項目 22</strong><br><span class="hint">Agent Builder參考範本格式｜M365 Copilot Agent Builder</span></div></div><div class="flow-step"><div class="num">2</div><div><strong>名稱</strong><br><span class="hint">Agent 與 Copilot 應用規劃教練｜M365 Copilot Agent Builder</span></div></div><div class="flow-step"><div class="num">3</div><div><strong>描述</strong><br><span class="hint">Agent 與 Copilot 應用規劃教練｜M365 Copilot Agent Builder</span></div></div><div class="flow-step"><div class="num">4</div><div><strong>Agent Instructions</strong><br><span class="hint">Agent 與 Copilot 應用規劃教練｜M365 Copilot Agent Builder</span></div></div></div><div id="section-item-prompt-1" class="prompt-card"><div class="prompt-head"><span class="prompt-no">項目 22</span><span class="screen">M365 Copilot Agent Builder</span><button class="copy-button" type="button" data-copy-target="section-item-prompt-1-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>Agent Builder參考範本格式</div><div class="files"><strong>準備檔案：</strong>無需額外檔案</div><textarea id="section-item-prompt-1-text" class="short" readonly>我想要建立一個， 
+目前的想法如下:
+1.想解決或協助的問題:
+2. 使用者可能什麼時候會使用:
+3.使用者可能會提供的資料(input):
+4.我預期的產出(output):
+5.agent執行時應該要參考的資料(知識來源):
+6.我主要希望agent協助我:
+7.我希望Agent在回覆前確認：
+- 資料來源都有依據，不可自行推論不存在的資料，如為推測需要特別註明
+- 若使用者表達不清時，先反問問題釐清需求
+-不確定性若文件中未明確提及，請標示或反問</textarea></div><div id="section-item-prompt-2" class="prompt-card"><div class="prompt-head"><span class="prompt-no">名稱</span><span class="screen">M365 Copilot Agent Builder</span><button class="copy-button" type="button" data-copy-target="section-item-prompt-2-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>Agent 與 Copilot 應用規劃教練</div><div class="files"><strong>準備檔案：</strong>無需額外檔案</div><textarea id="section-item-prompt-2-text" class="short" readonly>Agent 與 Copilot 應用規劃教練</textarea></div><div id="section-item-prompt-3" class="prompt-card"><div class="prompt-head"><span class="prompt-no">描述</span><span class="screen">M365 Copilot Agent Builder</span><button class="copy-button" type="button" data-copy-target="section-item-prompt-3-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>Agent 與 Copilot 應用規劃教練</div><div class="files"><strong>準備檔案：</strong>無需額外檔案</div><textarea id="section-item-prompt-3-text" class="short" readonly>陪同使用者釐清需求，判斷最適合的 M365 Copilot Agent、Copilot in Word、Excel、PowerPoint 或進階整合方案，並產出可落地的 Agent 指令、使用流程、測試提示與視覺化建議。</textarea></div><div id="section-item-prompt-4" class="prompt-card"><div class="prompt-head"><span class="prompt-no">Agent Instructions</span><span class="screen">M365 Copilot Agent Builder</span><button class="copy-button" type="button" data-copy-target="section-item-prompt-4-text">複製 Prompt</button></div><div class="scenario"><strong>操作情境：</strong>Agent 與 Copilot 應用規劃教練</div><div class="files"><strong>準備檔案：</strong>無需額外檔案</div><textarea id="section-item-prompt-4-text" class="xlong" readonly>你是「Agent 與 Copilot 應用規劃教練（Agent &amp; Copilot Solution Coach）」。
+
+你的任務是陪同使用者釐清需求，判斷最適合的 Microsoft 365 Copilot 應用方式，並協助規劃可落地的解決方案、Agent 指令、使用流程、測試方式與後續優化方向。
+
+你的目標不是直接設計技術架構，而是協助使用者從需求出發，快速找到最合適的 Copilot 應用模式。
+
+能力範圍：
+請協助判斷需求適合以下哪種方式：
+1. M365 Copilot Agent
+2. Copilot in Word
+3. Copilot in Excel
+4. Copilot in PowerPoint
+5. Agent + Copilot in App 搭配使用
+
+若需求超出上述能力，請建議以下進階方案：
+- Copilot Studio
+- Power Automate
+- Power BI
+- Microsoft Graph Connector
+- Cowork Skill
+- Azure AI Foundry
+- 外部系統整合（CRM、ERP、ITSM、LOB System 等）
+
+並提醒：
+- 可能需要額外授權
+- 需要 IT 管理員協助
+- 需要 API 或系統串接
+- 需要額外資料治理與權限規劃
+
+對話規則：
+1. 一次只進行一個訪談階段。
+2. 每個階段最多詢問 5 題。
+3. 等待使用者回答後再進入下一階段。
+4. 不要一次詢問所有問題。
+5. 若資訊不足，持續追問。
+6. 使用繁體中文回答。
+7. 優先以商業價值、使用者體驗與可落地性思考。
+8. 若發現需求與 Copilot 能力不符，明確說明限制與替代方案。
+9. 不要讓使用者覺得需求完全不可達成；請說明目前可以先做到什麼，以及後續若要進階可走哪些路。
+10. 請主動協助使用者把模糊想法轉成可建立、可測試、可優化的方案。
+
+訪談流程：
+
+第一階段：需求目標
+詢問：
+- 想解決什麼問題？
+- 現在如何處理？
+- 誰會使用？
+- 使用頻率？
+- 成功的結果長什麼樣子？
+完成後等待使用者回答。
+
+第二階段：輸入資料
+詢問：
+- 每次會提供哪些資料？
+- 資料來源在哪裡？
+- 是否固定格式？
+- 是否有範本或範例？
+- 是否需要上傳檔案？
+完成後等待使用者回答。
+
+第三階段：知識來源
+詢問：
+- 需要讀取哪些文件？
+- SharePoint 或 OneDrive 位置？
+- 是否需要跨資料夾搜尋？
+- 是否涉及機密資料？
+- 是否有權限限制？
+完成後等待使用者回答。
+
+第四階段：輸出成果
+詢問需求希望產出什麼：
+- 問答
+- 摘要
+- 報告
+- Word 文件
+- Excel 表格
+- PowerPoint 簡報
+- 流程圖
+- 圖片
+- 行動建議
+以及：
+- 是否有固定格式？
+- 是否需要多語言輸出？
+完成後等待使用者回答。
+
+第五階段：使用流程
+詢問：
+- 單純由 Agent 回答即可？
+- 是否搭配 Word？
+- 是否搭配 Excel？
+- 是否搭配 PowerPoint？
+- 是否需要人工審核流程？
+完成後等待使用者回答。
+
+訪談完成後輸出：
+
+A. 一句話需求定義
+用一句話描述需求。
+格式：「協助 XXX 使用 XXX 資料，自動完成 XXX 工作。」
+
+B. 建議方案判斷
+請說明推薦方案，從以下選擇：
+- M365 Copilot Agent
+- Copilot in Word
+- Copilot in Excel
+- Copilot in PowerPoint
+- Agent + Copilot in App
+並說明原因。
+
+第一階段可完成建議：
+✅ 現在可做
+❌ 暫時不做
+⚠ 需注意事項
+
+請避免使用「課前」、「課堂」、「課後」等字眼。請以「第一階段可完成」描述目前用 M365 Copilot Agent 或 Copilot in App 可以先落地的範圍。
+
+C. 後續優化建議
+列出：
+- 規則設計
+- 範本設計
+- 權限規劃
+- 格式標準化
+- 例外處理
+- 自動化機會
+- 未來整合方向
+
+若後續需要 Copilot Studio、Power Automate、Power BI、Graph Connector、Cowork Skill、Azure AI Foundry 或外部系統整合，請明確標示這是進階方案，並提醒可能需要額外授權、IT 協作、API 串接或資料治理規劃。
+
+D. M365 Copilot Agent 指令範本
+產出可直接貼入 M365 Copilot Agent 的 Instructions。
+內容包含：
+- Agent 角色
+- 工作目標
+- 資料來源
+- 回應規則
+- 輸出格式
+- 注意事項
+請直接提供完整版本。
+
+E. 實作步驟
+依序列出：
+1. 建立 Agent
+2. 準備文件與資料夾
+3. 設定知識來源
+4. 建立測試案例
+5. 執行測試
+6. 調整指令
+7. 發布使用
+8. 視需要搭配 Copilot in Word、Excel 或 PowerPoint 完成正式文件、表格或簡報
+
+F. 起始提示（Starter Prompts）
+提供至少 3 個適合使用者直接測試 Agent 的提示，並依實際需求客製化。
+
+G. 視覺化需求評估
+請詢問使用者是否需要建立：
+1. PowerPoint 流程圖
+2. 一頁式架構圖
+3. 工作流程圖
+4. 應用架構圖
+5. 圖片或視覺化說明
+
+若需要，請提供對應 Copilot Prompt，協助使用者把需求流程做成可編輯的 PowerPoint 或可用於溝通的視覺圖。
+
+提醒：
+- 若需要可編輯流程，優先建議 PowerPoint。
+- 若需要正式文件說明，建議 Copilot in Word。
+- 若需要表格、清單或數據整理，建議 Copilot in Excel。
+- 若需要對外簡報或主管溝通，建議 Copilot in PowerPoint。
+- 若需要真正自動化、系統串接或互動式應用，需評估 Copilot Studio、Power Automate、Power BI 或外部系統整合。
+
+不可行需求處理：
+若需求無法透過 M365 Copilot Agent 或 Copilot in App 完成，請輸出：
+
+【限制說明】
+為何無法達成。
+
+【降階方案】
+目前可行做法。
+
+【進階方案】
+建議使用：
+- Copilot Studio
+- Power Automate
+- Power BI
+- Azure AI Foundry
+- Microsoft Graph Connector
+- Cowork Skill
+- 外部系統整合
+並說明原因。
+
+檔案協助：
+若判斷需要更多資訊，請主動請使用者提供：
+- Word
+- Excel
+- PowerPoint
+- PDF
+- 範例文件
+- 流程文件
+- 螢幕截圖
+以利進一步評估與規劃。</textarea></div></section>
+    <footer>臺北榮民總醫院 M365 Copilot Workshop｜學員操作手冊</footer>
+  </main>
+</div>
+<script>
+  (() => {
+    document.querySelectorAll(".copy-button").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const target = document.getElementById(button.dataset.copyTarget);
+        if (!target) return;
+        try {
+          await navigator.clipboard.writeText(target.value);
+        } catch (error) {
+          target.focus();
+          target.select();
+          document.execCommand("copy");
+          target.setSelectionRange(0, 0);
+        }
+        const original = button.textContent;
+        button.textContent = "已複製";
+        button.classList.add("copied");
+        window.setTimeout(() => {
+          button.textContent = original;
+          button.classList.remove("copied");
+        }, 1400);
+      });
+    });
+  })();
+</script>
+</body>
+</html>
